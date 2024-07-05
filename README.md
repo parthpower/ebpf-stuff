@@ -29,3 +29,11 @@ make IFNAME="ens1"
 
 # FYI read_count doesn't really work, use "bpftool map dump name time_deltas"
 ```
+
+## some quirks
+
+### DEBUG=1 very slow!
+
+about 10x slower :(
+
+### `lvm-objdump --no-show-raw-insn --section=classifier -S ebpf_nfilter.o` to see assembly
