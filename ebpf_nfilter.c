@@ -92,19 +92,21 @@ count_packets (struct __sk_buff *skb)
   __u64 *pkt_cnt, *first_ts, *last_ts, *total_delta, *min_delta, *max_delta;
 
   // fail if we can't fetch stuff
-  if (fetch_val (TIME_DELTAS_KEY_TOTAL_PKT, (void **)&pkt_cnt) < 0)
+  if (unlikely (fetch_val (TIME_DELTAS_KEY_TOTAL_PKT, (void **)&pkt_cnt) < 0))
     {
       return TC_ACT_OK;
     }
-  if (fetch_val (TIME_DELTAS_KEY_FIRST_TS, (void **)&first_ts) < 0)
+  if (unlikely (fetch_val (TIME_DELTAS_KEY_FIRST_TS, (void **)&first_ts) < 0))
     {
       return TC_ACT_OK;
     }
-  if (fetch_val (TIME_DELTAS_KEY_LAST_TS, (void **)&last_ts) < 0)
+  if (unlikely (fetch_val (TIME_DELTAS_KEY_LAST_TS, (void **)&last_ts) < 0))
     {
       return TC_ACT_OK;
     }
-  if (fetch_val (TIME_DELTAS_KEY_TOTAL_TS_DELTA, (void **)&total_delta) < 0)
+  if (unlikely (
+          fetch_val (TIME_DELTAS_KEY_TOTAL_TS_DELTA, (void **)&total_delta)
+          < 0))
     {
       return TC_ACT_OK;
     }
@@ -112,7 +114,8 @@ count_packets (struct __sk_buff *skb)
     {
       return TC_ACT_OK;
     }
-  if (fetch_val (TIME_DELTAS_KEY_MAX_TS_DELTA, (void **)&max_delta) < 0)
+  if (unlikely (fetch_val (TIME_DELTAS_KEY_MAX_TS_DELTA, (void **)&max_delta)
+                < 0))
     {
       return TC_ACT_OK;
     }
@@ -149,7 +152,6 @@ count_packets (struct __sk_buff *skb)
   __u64 avg = total_delta_val / cnt;
   __u64 min_delta_val = __sync_add_and_fetch (min_delta, 0);
   __u64 max_delta_val = __sync_add_and_fetch (max_delta, 0);
-
   DEBUG_PRINT ("max_delta: %lluns min_delta: %lluns", max_delta_val,
                min_delta_val);
   DEBUG_PRINT ("avg_delta: %lluns = %lluus = %llums", avg, avg / 1000,
