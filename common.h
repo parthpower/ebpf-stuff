@@ -1,8 +1,14 @@
 #ifndef COMMON_H
 #define COMMON_H
+
+#ifdef NOUNLIKELY
+#define unlikely(x) x
+#define likely(x) x
+#else
 // yoinked from somewhere...
 #define unlikely(x) __builtin_expect (!!(x), 0)
 #define likely(x) __builtin_expect (!!(x), 1)
+#endif
 
 typedef enum
 {
